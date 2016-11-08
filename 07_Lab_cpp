@@ -1,0 +1,193 @@
+//THIS CODE IS INCOMPLETE
+
+#include <iostream>
+#include <string>
+#include <vector>
+#include <stdlib.h>
+#include <ctime>
+#include <math.h> 
+#include <algorithm>
+
+using namespace std;
+
+const int NOT_IN_VECTOR = -5;
+
+
+void CutRestaurants(int numCut, vector<string>& allRestaurants) { //CUT
+	if (numCut > allRestaurants.size() - 1) {
+		cout << "The restaurants can not be cut there, there are only " << allRestaurants.size() - 1 << " restaurants in the list." << endl;
+		cout << endl;
+	}
+	else {
+
+		rotate(allRestaurants.begin() + 1, allRestaurants.begin() + (numCut + 1), allRestaurants.end());
+	}
+}
+
+vector<string> InitializeAllRestaurants() { //INITIALIZES A VECTOR
+	vector<string> allRestaurants;
+	allRestaurants.push_back("place holder");
+	return allRestaurants;
+}
+
+void PrintRestaurants(vector<string>& allRestaurants) { // PRINT FUNCTION
+	cout << "Here are the current restaurants:" << endl;
+	cout << endl;
+	for (int i = 1; i < allRestaurants.size(); i++) {
+		cout << "\t\"" << allRestaurants.at(i) << "\"" << endl;
+	}
+	cout << endl;
+}
+
+int SearchAllRestaurants(string restaurant, vector<string> allRestaurants) { // search vector for existing restaurant
+	for (int j = 0; j < allRestaurants.size(); j++) {
+		if (restaurant == allRestaurants.at(j)) {
+			return j;
+		}
+	}
+	return NOT_IN_VECTOR;
+}
+
+void AddRestaurant(string restaurant, vector<string>& allRestaurants) { //ADD RESTAURANT
+	int foundIt = SearchAllRestaurants(restaurant, allRestaurants);
+	if ((allRestaurants.at(0) == "") && (foundIt == NOT_IN_VECTOR)) {
+		allRestaurants.at(0) = restaurant;
+		cout << restaurant << " has been added." << endl;
+		
+	}
+	else if (foundIt == NOT_IN_VECTOR) {
+		allRestaurants.push_back(restaurant);
+		cout << restaurant << " has been added." << endl;
+
+	}
+	else {
+		cout << "That restaurant is already on the list, you can not add it again." << endl;
+	}
+	cout << endl;
+}
+
+void RemoveRestaurant(string restaurant, vector<string>& allRestaurants) { // REMOVE RESTAURANT
+	int foundIt = SearchAllRestaurants(restaurant, allRestaurants);
+	if (foundIt != NOT_IN_VECTOR) {
+		int endVectorIndex = allRestaurants.size() - 1;
+		allRestaurants.erase(allRestaurants.begin() + foundIt);
+		cout << restaurant << " has been removed." << endl;
+		
+	}
+	else {
+		cout << "That restaurant is not on the list, you can not remove it." << endl;
+	}
+	cout << endl;
+}
+
+void shuffleRestaurants(vector<string>& allRestaurants) {
+	
+	int shuffleHalf = (allRestaurants.size() - 1) / 2;
+	if (shuffleHalf * 2 != allRestaurants.size() - 1) {
+		cout << "A shuffle is not possible. Please add or remove resturants.";
+	}
+	else {
+		vector<string> shuffledRestaurants(allRestaurants.size());
+		for (int b = 1; b < shuffledRestaurants.size(); b++) {
+			shuffledRestaurants.at(b) = allRestaurants.at(b);
+		}
+		for (int c = 1; c < shuffleHalf; c++) {
+			allRestaurants.at(c) = shuffledRestaurants.at(c + shuffleHalf - 1);
+		}
+	}
+}
+
+
+
+
+
+int main() {
+
+	int runMain = 1;
+	//initialize restaurant vector
+	vector<string> allRestaurants = InitializeAllRestaurants();
+
+	
+
+	cout << "Welcome to the restaurant battle!" << endl;
+	cout << endl;
+	cout << endl;
+
+
+	while (runMain == 1) {
+
+		int userMain = 0;
+
+		cout << "Please select one of the following options: " << endl;
+		cout << endl;
+		cout << "0 - Quit the program" << endl;
+		cout << "1 - Display all restaurants" << endl;
+		cout << "2 - Add a restaurant" << endl;
+		cout << "3 - Remove a restaurant" << endl;
+		cout << "4 - \"Cut\" the list of restaurants" << endl;
+		cout << "5 - \"Shuffle\" the list of restaurants" << endl;
+		cout << "6 - Begin the tournament" << endl;
+		cout << endl;
+		cout << "Enter your selection now: ";
+		cin >> userMain;
+		cin.ignore();
+		cout << endl;
+
+		if (userMain == 0) {
+			cout << "GOODBYE!" << endl;
+			runMain = 0;
+		}
+
+		if (userMain == 1) {
+
+			//PrintRestaurants
+			PrintRestaurants(allRestaurants);
+		}
+
+
+
+		if (userMain == 2) {
+
+			string userRestaurant;
+			cout << "What is the name of the restaurant you want to add? ";
+			getline(cin, userRestaurant);
+			cout << endl;
+			AddRestaurant(userRestaurant, allRestaurants);
+		}
+
+		if (userMain == 3) {
+			string userRestaurant;
+			cout << "What is the name of the restaurant you want to remove? ";
+			getline(cin, userRestaurant);
+			cout << endl;
+			RemoveRestaurant(userRestaurant, allRestaurants);
+		}
+
+		if (userMain == 4) { //CUT
+			int userCut = 0;
+			cout << "How many restaurants should be taken from the top and put on the bottom? ";
+			cin >> userCut;
+			cout << endl;
+			CutRestaurants(userCut, allRestaurants);
+		}
+
+		if (userMain == 5) {
+			shuffleRestaurants(allRestaurants);
+
+		}
+
+
+
+		else if ((userMain > 6) || (userMain < 0)) {
+			cout << "INVALID SELECTION. Please try again." << endl;
+			cout << endl;
+		}
+
+
+
+	}
+
+
+	//system("pause");
+	return 0;
+}
